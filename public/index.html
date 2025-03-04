@@ -18,27 +18,35 @@
     Made with ❤️ by <a href="https://github.com/codeswithganesh" target="_blank">Ganesh</a>
   </footer>
 
-  <!-- <script>
+  <script>
     document.getElementById('qrForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const url = document.getElementById('url').value;
 
-      const response = await fetch('/.netlify/functions/api/generateQr', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ url }),
-      });
+      try {
+        const response = await fetch('/.netlify/functions/api/generateQr', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ url }),
+        });
 
-      if (response.ok) {
-        const blob = await response.blob();
-        const imageUrl = URL.createObjectURL(blob);
-        document.getElementById('qrCode').innerHTML = `<img src="${imageUrl}" alt="QR Code">`;
-      } else {
-        alert('Failed to generate QR code. Please check the URL.');
+        if (response.ok) {
+          // Create a Blob from the binary image data
+          const blob = await response.blob();
+          const imageUrl = URL.createObjectURL(blob);
+
+          // Display the QR code image
+          document.getElementById('qrCode').innerHTML = `<img src="${imageUrl}" alt="QR Code">`;
+        } else {
+          alert('Failed to generate QR code. Please check the URL.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while generating the QR code.');
       }
     });
-  </script> -->
+  </script>
 </body>
 </html>
