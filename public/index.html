@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Generator</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <form id="qrForm">
+    <label for="url">Enter the URL</label>
+    <input type="text" name="url" id="url" placeholder="https://google.com">
+    <button type="submit">Generate QR</button>
+  </form>
+  <div id="qrCode"></div>
+
+  <footer>
+    Made with ❤️ by <a href="https://github.com/codeswithganesh" target="_blank">Ganesh</a>
+  </footer>
+
+  <script>
+    document.getElementById('qrForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const url = document.getElementById('url').value;
+
+      const response = await fetch('/.netlify/functions/api/generateQr', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url }),
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const imageUrl = URL.createObjectURL(blob);
+        document.getElementById('qrCode').innerHTML = `<img src="${imageUrl}" alt="QR Code">`;
+      } else {
+        alert('Failed to generate QR code. Please check the URL.');
+      }
+    });
+  </script>
+</body>
+</html>
